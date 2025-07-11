@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+        <div class="weather">
+            <div class="header">
+               <div class="city-name">
+                <input type="text" placeholder="Enter the city name " class="input" required>
+               </div>
+               <div class="search-icon" onclick="data()">
+                <img src="C:\Users\Admin\Desktop\weather app\weather-app-img\images\search.png" alt="search image is here" class="search-img">
+               </div>
+            </div>
+            <div class="temperature-info">
+                <div class="cloud-img">
+                    <img src="C:\Users\Admin\Desktop\weather app\weather-app-img\images\clouds.png" class="cloudimage">
+                </div>
+                <div class="degree-celsius">
+                    <span class="degree-celsius">value</span>
+                    <span><sup>o</sup>C</span>
+                    
+                </div>
+                <div class="city-name">
+                   <span class="cityname-display">city name</span> 
+                </div>
+            </div>
+            <footer>
+                <div class="humidiy-info">
+                   <img src="C:\Users\Admin\Desktop\weather app\weather-app-img\images\humidity.png">
+                </div>
+                <div class="humidity">
+                    <span class="humidity-value">value%</span>
+                    <p> Humidity</p>
+                </div>
+                
+                <div class="windspeed-info">
+                  <img src="C:\Users\Admin\Desktop\weather app\weather-app-img\images\wind.png">
+                </div>
+                <div class="wind">
+                    <span class="wind-value"> value km/h</span>
+                    <p>Wind Speed</p></div>
+            </footer>
+
+        </div>
+</body>
+<script>
+    let city_name = document.querySelector('.input');
+    console.log(city_name.value);
+    let degree =  document.querySelector('.degree-celsius');
+    let humidity = document.querySelector('.humidity-value');
+    let wind_speed = document.querySelector('.wind-value');
+     let displaycityname = document.querySelector('.cityname-display');
+     let degreesign = document.querySelector('.degree-sign') ;
+     let weatherimg = document.querySelector('.cloudimage')
+   //  https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
+
+   let temvalue ;
+    function data()
+    {  
+        const api = "2f7609a6caeed7aaeeadd879db77cd97" ;
+        const apiurl = "https://api.openweathermap.org/data/2.5/weather?q=";
+
+        let temperature = `${apiurl}${city_name.value}&appid=${api}` ;
+        console.log(temperature);
+
+
+        fetch(temperature).then((res)=>{
+                return res.json();
+        })
+        .then((data)=>{
+            console.log(data);
+            let tempkelvin = data.main.temp ;
+             temvalue =  Math.round(tempkelvin-273.15) ;
+            degree.textContent = ` ${temvalue} deg celsius`;
+
+            let humidityans = data.main.humidity ;
+            humidity.textContent = humidityans + " %" ;
+            console.log(humidityans)
+
+            let windspeed = data.wind.speed ;
+            wind_speed.textContent = windspeed + " km/h" ;
+            console.log(windspeed)
+
+            let cityname = data.name ;
+            displaycityname.textContent = cityname ;
+            console.log(cityname)
+
+            // images chager as per the temperature
+
+                if(temvalue <= 0)
+                {
+                // freezing cold (snowy)
+                weatherimg.src ='weather app/weather-app-img/images/snow.png' ;
+                }
+                else if((temvalue > 0 ) && (temvalue == 1 || temvalue <= 15)){
+                // cold 
+                weatherimg.src ='weather-app-img/images/mist.png' ;
+ 
+                }
+                else if(temvalue >= 16 || temvalue <= 25){
+                // cool or cloudy
+                weatherimg.src ='weather-app-img/images/clouds.png' ;
+                }
+                else if(temvalue >= 26 || temvalue <= 35){
+                // warm or sunny
+                weatherimg.src ='weather-app-img/images/clear.png' ;
+                }
+                else{
+                // very hot
+                weatherimg.src ='weather-app-img/images/clear.png' ;
+                }
+
+        })
+        .catch((err)=>{
+             console.log(`Errors:${err}`) 
+        })
+    }
+    
+
+</script>
+</html>
